@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isrene"
+version = "0.0.0"
+authors = [
+    {name = "Daniel Weindl", email = "sci@danielweindl.de"},
+]
+description = "Isotopologue reaction networks in Python"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "BSD-3-Clause"}
+dependencies = [
+    "python-libsbml>=5.20.2",
+    "sympy>=1.12",
+    "pint>=0.20.1",
+    "sbmlmath>=0.0.1",
+    "numpy>=1.25.1",
+    "more-itertools>=9.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pre-commit>=3", "tox>=4.11.3"]
+test = ["pytest>=7"]
+amici = ["amici>=0.19.0"]
+examples = ["matplotlib>=3.7.1", "jupyter", "isrene[amici]"]
+
+[tool.black]
+line-length = 79
