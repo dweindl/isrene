@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron:  '48 4 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: apt
+      run: |
+        sudo apt-get update \
+          && sudo apt-get install -y swig4.0 libatlas-base-dev
+
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.python-version }}-
+
+
+    - name: Install local packages
+      run: |
+        pip install --upgrade pip setuptools wheel && pip install .[test,examples]
+
+    - name: Unit tests
+      run: pytest -vv
+
+    - name: Run notebooks
+      run: tests/run-notebooks.sh examples/

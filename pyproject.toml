@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pre-commit>=3", "tox>=4.11.3"]
+dev = ["pre-commit>=3", "isrene[test]", "tox>=4.11.3",]
 test = ["pytest>=7"]
 amici = ["amici>=0.19.0"]
 examples = ["matplotlib>=3.7.1", "jupyter", "isrene[amici]"]
