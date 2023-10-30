@@ -12,6 +12,8 @@ Writing up the equations for a dynamic model of metabolic stable isotope labelin
 * exporting the rule-based model to [SBML-multi](https://doi.org/10.1515/jib-2017-0077)
 * generating the full species/reaction network from the rule-based formulation and exporting it to core-[SBML](https://sbml.org/)
 
+<div><img src="doc/gfx/overview.svg" alt="overview figure"></div>
+
 ## Installation
 
 `isrene` is not yet available on PyPI. To install, clone this repository and run `pip install .` from the root directory.
