@@ -2,6 +2,7 @@ import libsbml
 import pytest
 
 from isrene.model_definition.model_export_sbml import *
+from isrene.sbml.annotations import get_annotations, set_annotations
 
 
 @pytest.fixture

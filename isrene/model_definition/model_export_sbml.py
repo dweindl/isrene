@@ -14,6 +14,7 @@ from sbmlmath import SpeciesSymbol, sympy_to_sbml_math
 from sympy.utilities.iterables import multiset_permutations
 
 from .. import ureg
+from ..sbml.annotations import set_annotations
 from ..sbml.sbml_pint import unit_from_pint
 from ..sbml.sbml_wrappers import (
     _check,
@@ -833,48 +834,3 @@ def _feature_mapping_to_sbml(
         stcmip.setReactant(reactant_id)
         stcmip.setReactantComponent(reactant_feature)
         stcmip.setProductComponent(product_feature)
-
-
-def set_annotations(
-    element: libsbml.SBase, annotations: Dict[str, Dict[str, str]]
-) -> None:
-    """Set SBML annotation for the given element"""
-    if not annotations:
-        return
-
-    def get_attributes(attrs: Dict[str, str]) -> str:
-        return " ".join(
-            f'{annotation_prefix}:{attrib_id}="{attrib_value}"'
-            for attrib_id, attrib_value in attrs.items()
-        )
-
-    for annot_type, attrs in annotations.items():
-        annot_str = (
-            f"<{annotation_prefix}:{annot_type} "
-            f'xmlns:{annotation_prefix}="{annotation_xmlns}" '
-            f"{get_attributes(attrs)}/>"
-        )
-        _check(element.appendAnnotation(annot_str))
-
-
-def get_annotations(annot_node: libsbml.XMLNode) -> Dict:
-    """Retrieve annotations from an SBML annotation block
-
-    Return dict with item names mapping to dicts of attribute IDs/values
-    """
-    if annot_node is None:
-        return {}
-
-    res = {}
-    for child_idx in range(annot_node.getNumChildren()):
-        child = annot_node.getChild(child_idx)
-        if child.getPrefix() != annotation_prefix:
-            continue
-
-        xml_attrs = child.getAttributes()
-        attrs = {
-            xml_attrs.getName(attr_idx): xml_attrs.getValue(attr_idx)
-            for attr_idx in range(xml_attrs.getNumAttributes())
-        }
-        res[child.getName()] = attrs
-    return res

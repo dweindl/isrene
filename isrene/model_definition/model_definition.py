@@ -42,6 +42,7 @@ __all__ = [
     "RateLawGenerator",
 ]
 
+# For type hints, any subclass of ModelComponent
 ModelComponentType = TypeVar("ModelComponentType", bound="ModelComponent")
 
 

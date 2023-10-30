@@ -1,4 +1,4 @@
-"""Functionality for MID correction"""
+"""Functionality for simulating/correcting mass distribution vectors"""
 from typing import Dict
 
 import numpy as np
@@ -8,7 +8,7 @@ from ..sum_formula import parse_sum_formula
 
 # mean of ranges from
 # https://www.degruyter.com/document/doi/10.1515/pac-2015-0503/html?lang=en
-natural_abundances = {
+natural_abundances: Dict[str, np.array] = {
     # isotope mass distributions [M0, M1, M2, ...]
     "C": np.array([(0.9884 + 0.9904) / 2, (0.0096 + 0.0116) / 2, 0]),
     "H": np.array([(0.99972 + 0.99999) / 2, (0.00001 + 0.00028) / 2, 0]),
@@ -81,7 +81,7 @@ def get_correction_matrix(
     return corr
 
 
-def get_natural_isotope_distribution(composition: Dict):
+def get_natural_isotope_distribution(composition: Dict) -> np.array:
     """Determine natural isotope distribution for the given
     elemental composition.
 
