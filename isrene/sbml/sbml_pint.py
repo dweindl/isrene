@@ -188,10 +188,14 @@ def _get_scale(
 def unit_from_pint(
     unit: pint.Unit, sbml_model: libsbml.Model, ureg: pint.UnitRegistry
 ) -> str:
-    """Returns the value for a 'unit' attribute for the given pint.Unit
+    """Returns the value for a 'unit' attribute for the given ``pint.Unit``
     and creates a new UnitDefinition if necessary"""
 
     # predefined and not allowed as ID for unitDefinitions
+    if unit.dimensionless is True:
+        # since pint 0.24.0, str(Unit("dimensionless")) == ""
+        return "dimensionless"
+
     unit_id = str(unit)
     if unit_id in predefined_sbml_units:
         return unit_id
