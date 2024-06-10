@@ -54,14 +54,18 @@ def _unit_definition_from_pint(
     unit: pint.Unit, sbml_model: libsbml.Model, ureg: pint.UnitRegistry
 ) -> libsbml.UnitDefinition:
     """Create an UnitDefinition in the given SBML model for the given pint unit"""
-    unit_id = str(unit)
-    unit_id = unit_id.replace(" / ", "_per_")
-    unit_id = unit_id.replace(" * ", "_times_")
-    unit_id = unit_id.replace(" ** ", "_power_of_")
-    unit_id = unit_id.replace(".", "_")
+    if unit.dimensionless is True:
+        # since pint 0.24.0, str(Unit("dimensionless")) == ""
+        unit_id = "dimensionless"
+    else:
+        unit_id = str(unit)
+        unit_id = unit_id.replace(" / ", "_per_")
+        unit_id = unit_id.replace(" * ", "_times_")
+        unit_id = unit_id.replace(" ** ", "_power_of_")
+        unit_id = unit_id.replace(".", "_")
 
-    # turn into a valid SBML ID
-    unit_id = unit_id.removeprefix("1_")
+        # turn into a valid SBML ID
+        unit_id = unit_id.removeprefix("1_")
 
     if not libsbml.SyntaxChecker_isValidSBMLSId(unit_id):
         raise AssertionError(
@@ -216,7 +220,7 @@ def sbml_unit_kind_id_to_str(sbml_kind: int) -> str:
 def sbml_unit_to_pint(
     sbml_unit: libsbml.Unit, ureg: pint.UnitRegistry
 ) -> pint.Unit:
-    """Convert an SBML Unit to to a pint Unit"""
+    """Convert an SBML Unit to a pint Unit"""
     # a unit in SBML is defined as (multiplier * 10^scale * kind)^exponent
     sbml_kind = sbml_unit.getKind()
     scale = sbml_unit.getScale()
