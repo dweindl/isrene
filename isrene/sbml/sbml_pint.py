@@ -67,7 +67,7 @@ def _unit_definition_from_pint(
         # turn into a valid SBML ID
         unit_id = unit_id.removeprefix("1_")
 
-    if not libsbml.SyntaxChecker_isValidSBMLSId(unit_id):
+    if not libsbml.SyntaxChecker().isValidSBMLSId(unit_id):
         raise AssertionError(
             f"Generated unit ID for '{unit}' is invalid: " f"{unit_id}"
         )
