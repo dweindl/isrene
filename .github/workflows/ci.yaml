@@ -27,7 +27,7 @@ jobs:
     - name: apt
       run: |
         sudo apt-get update \
-          && sudo apt-get install -y swig4.0 libatlas-base-dev
+          && sudo apt-get install -y swig4.1 libatlas-base-dev
 
     - name: Cache pip
       uses: actions/cache@v4
